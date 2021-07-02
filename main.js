@@ -11,6 +11,7 @@ let $popupInput;
 let $addPopupBtn;
 let $closeTodoBtn;
 let $idNumber = 0;
+let $allTodos;
 
 
 const main = () =>{
@@ -26,10 +27,10 @@ $ulList = document.querySelector('.todoList ul');
 
 $popup = document.querySelector('.popup');
 $popupInfo = document.querySelector('.popupInfo');
-//$editedTodo = document.querySelector('.popup');
 $popupInput = document.querySelector('.popupInput');
 $addPopupBtn = document.querySelector('.accept');
 $closeTodoBtn = document.querySelector('.cancel');
+$allTodos = $ulList.getElementsByTagName('li');
 };
 
 const prepareDOMEvents =() =>{
@@ -37,6 +38,7 @@ $addBtn.addEventListener('click', addNewTask);
 $ulList.addEventListener('click', checkClick);
 $closeTodoBtn.addEventListener('click', closePopup);
 $addPopupBtn.addEventListener('click', changeTodo);
+$todoInput.addEventListener('keyup', enterCheck);
 };
 
 const addNewTask = () =>{
@@ -55,6 +57,12 @@ const addNewTask = () =>{
     $alertInfo.innerText = 'Musisz wpisać treść zadania';
  }
 };
+
+const enterCheck = () => {
+    if(event.keycode === 13){
+        addNewTask();
+    }
+}
 
 const createToolsArea = () => {
     const toolsPanel = document.createElement('div');
@@ -85,7 +93,7 @@ const checkClick = (e) =>{
     }else if (e.target.closest('button').className === 'edit'){
         editTask(e);
     }else if (e.target.closest('button').className === 'delete'){
-        console.log('delete');
+        deleteTask(e);
     }
 };
 
@@ -105,10 +113,18 @@ const changeTodo = () =>{
     };
 };
 
-
 const closePopup = () =>{
     $popup.style.display = 'none';
 };
+
+const deleteTask = (e) => {
+ const deleteTodo = e.target.closest('li');
+ deleteTodo.remove();
+
+ if($allTodos.length === 0){
+     $alertInfo.innerText = 'There is no task on the list, please add one';
+ }
+}
 
 document.addEventListener('DOMContentLoaded', main);
 
